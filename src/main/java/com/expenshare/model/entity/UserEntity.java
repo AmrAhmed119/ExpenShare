@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class UserEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,23 +26,8 @@ public class UserEntity {
     @Column(name = "mobile_number", length = 20)
     private String mobileNumber;
 
-    @Column(name = "addr_line1", length = 150)
-    private String addrLine1;
-
-    @Column(name = "addr_line2", length = 150)
-    private String addrLine2;
-
-    @Column(name = "addr_city", length = 80)
-    private String addrCity;
-
-    @Column(name = "addr_state", length = 80)
-    private String addrState;
-
-    @Column(name = "addr_postal", length = 20)
-    private String addrPostal;
-
-    @Column(name = "addr_country", length = 2)
-    private String addrCountry;
+    @Embedded
+    private Address address;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
