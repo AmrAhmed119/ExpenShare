@@ -26,8 +26,23 @@ public class UserEntity {
     @Column(name = "mobile_number", length = 20)
     private String mobileNumber;
 
-    @Embedded
-    private Address address;
+    @Column(name = "addr_line1", length = 150)
+    private String addressLine1;
+
+    @Column(name = "addr_line2", length = 150)
+    private String addressLine2;
+
+    @Column(name = "addr_city", length = 80)
+    private String addressCity;
+
+    @Column(name = "addr_state", length = 80)
+    private String addressState;
+
+    @Column(name = "addr_postal", length = 20)
+    private String addressPostal;
+
+    @Column(name = "addr_country", length = 2)
+    private String addressCountry;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;

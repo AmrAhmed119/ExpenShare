@@ -1,7 +1,7 @@
 package com.expenshare.controller;
 
 import com.expenshare.model.dto.user.CreateUserRequest;
-import com.expenshare.model.entity.UserEntity;
+import com.expenshare.model.dto.user.UserDto;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import jakarta.validation.Valid;
@@ -10,13 +10,12 @@ import jakarta.validation.Valid;
 public class UserController {
 
     @Post
-    public HttpResponse<UserEntity> createUser(@Body @Valid CreateUserRequest createUserRequest) {
+    public HttpResponse<UserDto> createUser(@Body @Valid CreateUserRequest createUserRequest) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Get("/{userId}")
-    public HttpResponse<UserEntity> getUser(@PathVariable Long userId) {
-        System.out.println(userId);
+    public HttpResponse<UserDto> getUser(@PathVariable Long userId) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }
