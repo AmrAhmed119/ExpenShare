@@ -32,8 +32,10 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
+    implementation("org.flywaydb:flyway-mysql:9.22.3") // MySQL support for Flyway
 }
 
 
@@ -56,6 +58,7 @@ micronaut {
         annotations("com.expenshare.*")
     }
     testResources {
+        additionalModules.add("jdbc-mysql")
         sharedServer = true
     }
     aot {
