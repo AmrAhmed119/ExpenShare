@@ -1,5 +1,6 @@
 package com.expenshare.service;
 
+import com.expenshare.event.KafkaProducer;
 import com.expenshare.model.dto.user.CreateUserRequest;
 import com.expenshare.model.dto.user.UserDto;
 import com.expenshare.model.entity.UserEntity;
@@ -11,17 +12,21 @@ import jakarta.inject.Singleton;
 public class UserService {
     private final UserRepositoryFacade userRepositoryFacade;
 
+    private final KafkaProducer kafkaProducer;
+
     private final UserMapper userMapper;
 
-    public UserService(UserRepositoryFacade userRepositoryFacade, UserMapper userMapper) {
+    public UserService(UserRepositoryFacade userRepositoryFacade, UserMapper userMapper, KafkaProducer kafkaProducer) {
         this.userRepositoryFacade = userRepositoryFacade;
         this.userMapper = userMapper;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public UserDto createUser(CreateUserRequest createUserRequest) {
         final UserEntity entity = userMapper.toEntity(createUserRequest);
         final UserEntity savedUser = userRepositoryFacade.create(entity);
-        // TODO: publish events to kafka
+        kafkaProducer.publishUserCreatedEvent("User created with ID: " + savedUser.getId());
+        kafkaProducer.publishWelcomeNotificationEvent("Welcome email to: " + savedUser.getEmail());
         return userMapper.toDto(savedUser);
     }
 
