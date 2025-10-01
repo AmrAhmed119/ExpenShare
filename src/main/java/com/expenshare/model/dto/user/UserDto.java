@@ -6,11 +6,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Serdeable
+@Getter
 @Setter
 public class UserDto {
     @NotNull(message = "User ID cannot be null")

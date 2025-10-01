@@ -9,5 +9,5 @@ CREATE TABLE users (
     addr_state VARCHAR(80),
     addr_postal VARCHAR(20),
     addr_country VARCHAR(2),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL
 );
