@@ -1,6 +1,7 @@
 package com.expenshare.service;
 
 import com.expenshare.event.KafkaProducer;
+import com.expenshare.event.model.MessageFactory;
 import com.expenshare.model.dto.user.CreateUserRequest;
 import com.expenshare.model.dto.user.UserDto;
 import com.expenshare.model.entity.UserEntity;
@@ -25,8 +26,14 @@ public class UserService {
     public UserDto createUser(CreateUserRequest createUserRequest) {
         final UserEntity entity = userMapper.toEntity(createUserRequest);
         final UserEntity savedUser = userRepositoryFacade.create(entity);
-        kafkaProducer.publishUserCreatedEvent("User created with ID: " + savedUser.getId());
-        kafkaProducer.publishWelcomeNotificationEvent("Welcome email to: " + savedUser.getEmail());
+
+        kafkaProducer.publishUserCreatedEvent(
+                MessageFactory.userCreatedMessage(entity.getId())
+        );
+        kafkaProducer.publishWelcomeNotificationEvent(
+                MessageFactory.welcomeNotificationMessage("USER")
+        );
+
         return userMapper.toDto(savedUser);
     }
 
