@@ -27,6 +27,10 @@
 
 - [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
 
+## Feature reactor documentation
+
+- [Micronaut Reactor documentation](https://micronaut-projects.github.io/micronaut-reactor/snapshot/guide/index.html)
+
 
 ## Feature micronaut-aot documentation
 
