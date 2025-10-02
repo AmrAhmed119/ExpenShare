@@ -2,6 +2,7 @@ package com.expenshare.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -44,6 +45,7 @@ public class UserEntity {
     @Column(name = "addr_country", length = 2)
     private String addressCountry;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

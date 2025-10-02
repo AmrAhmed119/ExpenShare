@@ -7,7 +7,6 @@ import com.expenshare.repository.UserRepository;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Transactional
@@ -38,7 +37,6 @@ public class UserRepositoryFacade {
         }
 
         user.setEmail(emailLower);
-        user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
