@@ -1,6 +1,5 @@
 package com.expenshare.repository.facade;
 
-import com.expenshare.exception.ConflictException;
 import com.expenshare.exception.NotFoundException;
 import com.expenshare.model.entity.UserEntity;
 import com.expenshare.repository.UserRepository;
@@ -32,13 +31,8 @@ public class UserRepositoryFacade {
 
     public UserEntity create(UserEntity user) {
         final String emailLower = user.getEmail().toLowerCase();
-        if (existsByEmail(emailLower)) {
-            throw new ConflictException("Email already exists");
-        }
-
         user.setEmail(emailLower);
 
         return userRepository.save(user);
     }
-
 }

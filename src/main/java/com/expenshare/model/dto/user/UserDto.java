@@ -33,6 +33,5 @@ public class UserDto {
     private @Valid AddressDto address;
 
     @NotNull(message = "Creation timestamp cannot be null")
-    @NotBlank(message = "Creation timestamp cannot be blank")
     private LocalDateTime createdAt;
 }

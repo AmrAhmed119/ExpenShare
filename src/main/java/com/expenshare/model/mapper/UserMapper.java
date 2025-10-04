@@ -16,6 +16,7 @@ public interface UserMapper {
     @Mapping(target = "addressCountry", source = "address.country")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "groupMemberships", ignore = true)
     UserEntity toEntity(CreateUserRequest req);
 
     @Mapping(target = "address.line1", source = "addressLine1")
