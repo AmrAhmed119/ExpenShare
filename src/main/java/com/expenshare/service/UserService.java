@@ -2,6 +2,7 @@ package com.expenshare.service;
 
 import com.expenshare.event.KafkaProducer;
 import com.expenshare.event.model.MessageFactory;
+import com.expenshare.exception.ConflictException;
 import com.expenshare.model.dto.user.CreateUserRequest;
 import com.expenshare.model.dto.user.UserDto;
 import com.expenshare.model.entity.UserEntity;
@@ -32,10 +33,14 @@ public class UserService {
      *
      * @param createUserRequest the request containing user data
      * @return the created user as a DTO
-     * @throws com.expenshare.exception.ConflictException if the email already exists
+     * @throws ConflictException if the email already exists
      */
     public UserDto createUser(CreateUserRequest createUserRequest) {
         final UserEntity entity = userMapper.toEntity(createUserRequest);
+        if (userRepositoryFacade.existsByEmail(entity.getEmail().toLowerCase())) {
+            throw new ConflictException("Email already exists");
+        }
+
         final UserEntity savedUser = userRepositoryFacade.create(entity);
 
         kafkaProducer.publishUserCreatedEvent(
