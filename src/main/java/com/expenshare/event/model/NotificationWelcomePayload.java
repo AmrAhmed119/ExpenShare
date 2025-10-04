@@ -3,5 +3,5 @@ package com.expenshare.event.model;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public record NotificationWelcomePayload(String targetType) {
+public record NotificationWelcomePayload(String targetType, Long targetId, String channel) {
 }

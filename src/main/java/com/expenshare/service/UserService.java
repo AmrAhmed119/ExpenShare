@@ -39,10 +39,10 @@ public class UserService {
         final UserEntity savedUser = userRepositoryFacade.create(entity);
 
         kafkaProducer.publishUserCreatedEvent(
-                MessageFactory.userCreatedMessage(entity.getId())
+                MessageFactory.entityCreatedMessage(entity.getId())
         );
         kafkaProducer.publishWelcomeNotificationEvent(
-                MessageFactory.welcomeNotificationMessage("USER")
+                MessageFactory.welcomeNotificationMessage("USER", savedUser.getId(), "EMAIL")
         );
 
         return userMapper.toDto(savedUser);

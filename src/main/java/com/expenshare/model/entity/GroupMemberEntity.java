@@ -17,16 +17,15 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class GroupMemberEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_group"))
     private GroupEntity group;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user"))
     private UserEntity user;
 

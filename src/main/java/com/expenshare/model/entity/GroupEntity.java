@@ -6,15 +6,15 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "`groups`")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 public class GroupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,13 @@ public class GroupEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<GroupMemberEntity> members = new HashSet<>();
+
+    public List<Long> getMemberIds() {
+        return members
+                .stream()
+                .map(m -> m.getUser().getId())
+                .toList();
+    }
 }
