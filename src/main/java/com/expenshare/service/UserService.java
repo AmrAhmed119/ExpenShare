@@ -22,7 +22,11 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public UserService(UserRepositoryFacade userRepositoryFacade, UserMapper userMapper, KafkaProducer kafkaProducer) {
+    public UserService(
+        UserRepositoryFacade userRepositoryFacade,
+        UserMapper userMapper,
+        KafkaProducer kafkaProducer
+    ) {
         this.userRepositoryFacade = userRepositoryFacade;
         this.userMapper = userMapper;
         this.kafkaProducer = kafkaProducer;
@@ -41,7 +45,7 @@ public class UserService {
             throw new ConflictException("Email already exists");
         }
 
-        final UserEntity savedUser = userRepositoryFacade.create(entity);
+        final UserEntity savedUser = userRepositoryFacade.save(entity);
 
         kafkaProducer.publishUserCreatedEvent(
                 MessageFactory.entityCreatedMessage(entity.getId())

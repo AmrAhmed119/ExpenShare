@@ -6,6 +6,7 @@ import com.expenshare.repository.UserRepository;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -29,10 +30,15 @@ public class UserRepositoryFacade {
         return userRepository.existsByEmail(emailLower);
     }
 
-    public UserEntity create(UserEntity user) {
+    public UserEntity save(UserEntity user) {
         final String emailLower = user.getEmail().toLowerCase();
         user.setEmail(emailLower);
 
         return userRepository.save(user);
+    }
+
+    public boolean isUsersExist(List<Long> userIds) {
+        return userIds.stream()
+                .allMatch(userId -> findById(userId).isPresent());
     }
 }
