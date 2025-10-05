@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +43,7 @@ public class CreateExpenseRequest {
     @Serdeable
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Share {
         @NotNull
         private Long userId;
