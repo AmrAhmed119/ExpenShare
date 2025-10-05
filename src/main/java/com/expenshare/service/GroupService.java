@@ -9,7 +9,9 @@ import com.expenshare.model.dto.group.CreateGroupRequest;
 import com.expenshare.model.dto.group.GroupDto;
 import com.expenshare.model.entity.GroupEntity;
 import com.expenshare.model.mapper.GroupMapper;
+import com.expenshare.repository.facade.GroupMemberRepositoryFacade;
 import com.expenshare.repository.facade.GroupRepositoryFacade;
+import com.expenshare.repository.facade.UserRepositoryFacade;
 import jakarta.inject.Singleton;
 
 /**
@@ -20,18 +22,26 @@ import jakarta.inject.Singleton;
 public class GroupService {
     private final GroupRepositoryFacade groupRepositoryFacade;
 
+    private final UserRepositoryFacade userRepositoryFacade;
+
     private final GroupMapper groupMapper;
 
     private final KafkaProducer kafkaProducer;
 
+    private final GroupMemberRepositoryFacade groupMemberRepositoryFacade;
+
     public GroupService(
         GroupRepositoryFacade groupRepositoryFacade,
         GroupMapper groupMapper,
-        KafkaProducer kafkaProducer
+        KafkaProducer kafkaProducer,
+        UserRepositoryFacade userRepositoryFacade,
+        GroupMemberRepositoryFacade groupMemberRepositoryFacade
     ) {
         this.groupRepositoryFacade = groupRepositoryFacade;
         this.groupMapper = groupMapper;
         this.kafkaProducer = kafkaProducer;
+        this.userRepositoryFacade = userRepositoryFacade;
+        this.groupMemberRepositoryFacade = groupMemberRepositoryFacade;
     }
 
     /**
@@ -42,7 +52,7 @@ public class GroupService {
      * @throws NotFoundException if one or more users are not found
      */
     public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
-        if (!groupRepositoryFacade.usersExist(createGroupRequest.getMembers())) {
+        if (!userRepositoryFacade.isUsersExist(createGroupRequest.getMembers())) {
             throw new NotFoundException("One or more users not found");
         }
 
@@ -50,7 +60,7 @@ public class GroupService {
                 groupMapper.toEntity(createGroupRequest)
         );
 
-        groupRepositoryFacade.addMembers(savedGroup.getId(), createGroupRequest.getMembers());
+        groupMemberRepositoryFacade.saveMembers(savedGroup.getId(), createGroupRequest.getMembers());
 
         kafkaProducer.publishGroupCreatedEvent(
                 MessageFactory.entityCreatedMessage(savedGroup.getId())
@@ -88,11 +98,11 @@ public class GroupService {
      * @throws NotFoundException if one or more users are not found, or the group does not exist
      */
     public AddMembersDto addMembersToGroup(Long groupId, AddMembersRequest addMembersRequest) {
-        if (!groupRepositoryFacade.usersExist(addMembersRequest.getMembers())) {
+        if (!userRepositoryFacade.isUsersExist(addMembersRequest.getMembers())) {
             throw new NotFoundException("One or more users not found");
         }
 
-        groupRepositoryFacade.addMembers(groupId, addMembersRequest.getMembers());
+        groupMemberRepositoryFacade.saveMembers(groupId, addMembersRequest.getMembers());
 
         final GroupEntity updatedGroup = groupRepositoryFacade.getOrThrow(groupId);
         return new AddMembersDto(updatedGroup.getId(), addMembersRequest.getMembers(), updatedGroup.getMembers().size());

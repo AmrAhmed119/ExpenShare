@@ -1,6 +1,7 @@
 package com.expenshare.event;
 
 import com.expenshare.event.model.EventMessage;
+import com.expenshare.event.model.ExpenseAddedPayload;
 import com.expenshare.event.model.NotificationWelcomePayload;
 import com.expenshare.event.model.EntityCreatedPayload;
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
@@ -16,4 +17,7 @@ public interface KafkaProducer {
 
     @Topic("group.created")
     void publishGroupCreatedEvent(EventMessage<EntityCreatedPayload> message);
+
+    @Topic("expense.added")
+    void publishExpenseAddedEvent(EventMessage<ExpenseAddedPayload> message);
 }
