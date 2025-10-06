@@ -52,4 +52,10 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<GroupMemberEntity> groupMemberships = new HashSet<>();
+
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.EAGER)
+    private Set<SettlementEntity> paidSettlements = new HashSet<>();
+
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.EAGER)
+    private Set<SettlementEntity> receivedSettlements = new HashSet<>();
 }

@@ -30,6 +30,9 @@ public class GroupEntity {
     @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<GroupMemberEntity> members = new HashSet<>();
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
+    private Set<SettlementEntity> settlements  = new HashSet<>();
+
     public List<Long> getMemberIds() {
         return members
                 .stream()
