@@ -27,12 +27,19 @@ public class GroupMemberRepositoryFacade {
         this.userRepositoryFacade = userRepositoryFacade;
     }
 
-    public boolean existsByGroupIdAndUserId(Long userId, Long groupId) {
+    public boolean existsByGroupIdAndUserId(Long groupId, Long userId) {
         return groupMemberRepository.existsByGroupIdAndUserId(groupId, userId);
     }
 
     public List<GroupMemberEntity> findAllByGroupId(Long groupId) {
         return groupMemberRepository.findAllByGroupId(groupId);
+    }
+
+    public List<Long> findGroupMemberIds(Long groupId) {
+        return findAllByGroupId(groupId)
+                .stream()
+                .map(groupMember -> groupMember.getUser().getId())
+                .toList();
     }
 
     public void saveMembers(Long groupId, List<Long> userIds) {

@@ -1,9 +1,6 @@
 package com.expenshare.event;
 
-import com.expenshare.event.model.EventMessage;
-import com.expenshare.event.model.ExpenseAddedPayload;
-import com.expenshare.event.model.NotificationWelcomePayload;
-import com.expenshare.event.model.EntityCreatedPayload;
+import com.expenshare.event.model.*;
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import io.micronaut.configuration.kafka.annotation.Topic;
 
@@ -20,4 +17,7 @@ public interface KafkaProducer {
 
     @Topic("expense.added")
     void publishExpenseAddedEvent(EventMessage<ExpenseAddedPayload> message);
+
+    @Topic("settlement.confirmed")
+    void publishSettlementConfirmedEvent(EventMessage<SettlementConfirmedPayload> message);
 }

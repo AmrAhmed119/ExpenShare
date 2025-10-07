@@ -68,7 +68,6 @@ public class ExpenseService {
         final List<Long> allParticipants = new ArrayList<>(List.of(payerId));
         allParticipants.addAll(participantIds != null ? new ArrayList<>(participantIds) : List.of());
 
-        // TODO: fix bug here when participants list are added in the request
         final boolean isAllExist = allParticipants.stream().allMatch(
             participantId -> groupMemberRepositoryFacade.existsByGroupIdAndUserId(groupId, participantId)
         );

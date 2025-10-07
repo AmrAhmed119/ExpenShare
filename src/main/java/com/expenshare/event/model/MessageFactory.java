@@ -1,5 +1,6 @@
 package com.expenshare.event.model;
 
+import com.expenshare.model.dto.settlement.SettlementDto;
 import com.expenshare.model.entity.ExpenseEntity;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,20 @@ public class MessageFactory {
                     entity.getPaidBy().getId(),
                     entity.getAmount(),
                     entity.getDescription()
+                )
+        );
+    }
+
+    public static EventMessage<SettlementConfirmedPayload> settlementConfirmedMessage(SettlementDto settlementDto) {
+        return new EventMessage<>(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                new SettlementConfirmedPayload(
+                    settlementDto.getSettlementId(),
+                    settlementDto.getGroupId(),
+                    settlementDto.getFromUserId(),
+                    settlementDto.getToUserId(),
+                    settlementDto.getAmount()
                 )
         );
     }

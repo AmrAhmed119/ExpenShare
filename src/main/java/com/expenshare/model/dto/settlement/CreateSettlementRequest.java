@@ -28,7 +28,7 @@ public class CreateSettlementRequest {
     private BigDecimal amount;
 
     @NotNull
-    private Method method;
+    private Method method = Method.OTHER;
 
     @Size(max = 255)
     private String note;
