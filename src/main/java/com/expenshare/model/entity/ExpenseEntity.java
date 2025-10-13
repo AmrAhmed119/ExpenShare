@@ -44,4 +44,7 @@ public class ExpenseEntity {
 
     @OneToMany(mappedBy = "expense", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<ExpenseShareEntity> shares = new HashSet<>();
+
+    @OneToMany(mappedBy = "expense", fetch = FetchType.EAGER)
+    private Set<SettlementEntity> settlements  = new HashSet<>();
 }

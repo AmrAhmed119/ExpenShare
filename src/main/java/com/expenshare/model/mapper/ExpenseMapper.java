@@ -17,6 +17,7 @@ public interface ExpenseMapper {
     @Mapping(target = "paidBy", ignore = true)  // handled in service
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "shares", ignore = true)
+    @Mapping(target = "settlements", ignore = true)
     ExpenseEntity toEntity(CreateExpenseRequest req);
 
     @Mapping(target = "expenseId", source = "e.id")

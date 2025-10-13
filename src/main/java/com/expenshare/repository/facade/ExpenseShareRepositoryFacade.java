@@ -44,4 +44,8 @@ public class ExpenseShareRepositoryFacade {
                     );
                 }).toList();
     }
+
+    public void update(ExpenseShareEntity expenseShare) {
+        expenseShareRepository.update(expenseShare);
+    }
 }

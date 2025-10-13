@@ -3,6 +3,7 @@ package com.expenshare.service.expense;
 import com.expenshare.event.KafkaProducer;
 import com.expenshare.event.model.MessageFactory;
 import com.expenshare.exception.NotFoundException;
+import com.expenshare.exception.ValidationException;
 import com.expenshare.model.dto.expense.CreateExpenseRequest;
 import com.expenshare.model.dto.expense.ExpenseDto;
 import com.expenshare.model.dto.expense.ShareDto;
@@ -73,7 +74,7 @@ public class ExpenseService {
         );
 
         if (!isAllExist) {
-            throw new NotFoundException("Participants must be group members");
+            throw new ValidationException("Participants must be group members");
         }
     }
 

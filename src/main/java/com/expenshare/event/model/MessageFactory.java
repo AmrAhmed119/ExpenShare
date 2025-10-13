@@ -47,7 +47,7 @@ public class MessageFactory {
                 LocalDateTime.now(),
                 new SettlementConfirmedPayload(
                     settlementDto.getSettlementId(),
-                    settlementDto.getGroupId(),
+                    settlementDto.getExpenseId(),
                     settlementDto.getFromUserId(),
                     settlementDto.getToUserId(),
                     settlementDto.getAmount()

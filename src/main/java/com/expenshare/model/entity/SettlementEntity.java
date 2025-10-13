@@ -22,8 +22,8 @@ public class SettlementEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_settlements_group"))
-    private GroupEntity group;
+    @JoinColumn(name = "expense_id", nullable = false, foreignKey = @ForeignKey(name = "fk_settlements_expense"))
+    private ExpenseEntity expense;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "from_user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_settlements_from_user"))

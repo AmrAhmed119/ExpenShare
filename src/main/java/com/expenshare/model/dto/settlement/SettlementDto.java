@@ -20,7 +20,7 @@ public class SettlementDto {
     private Long settlementId;
 
     @NotNull
-    private Long groupId;
+    private Long expenseId;
 
     @NotNull
     private Long fromUserId;

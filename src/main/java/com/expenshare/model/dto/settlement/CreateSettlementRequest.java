@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Setter
 public class CreateSettlementRequest {
     @NotNull
-    private Long groupId;
+    private Long expenseId;
 
     @NotNull
     private Long fromUserId;
