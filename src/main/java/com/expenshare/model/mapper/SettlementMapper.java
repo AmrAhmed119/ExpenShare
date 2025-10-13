@@ -2,6 +2,7 @@ package com.expenshare.model.mapper;
 
 import com.expenshare.model.dto.settlement.CreateSettlementRequest;
 import com.expenshare.model.dto.settlement.SettlementDto;
+import com.expenshare.model.dto.settlement.SettlementStatusDto;
 import com.expenshare.model.entity.SettlementEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,4 +24,7 @@ public interface SettlementMapper {
     @Mapping(target = "toUserId", source = "toUser.id")
     @Mapping(target = "createdAt", source = "createdAt")
     SettlementDto toDto(SettlementEntity entity);
+
+    @Mapping(target = "settlementId", source = "id")
+    SettlementStatusDto toStatusDto(SettlementEntity entity);
 }

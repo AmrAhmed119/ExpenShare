@@ -7,7 +7,7 @@ CREATE TABLE settlements (
     method ENUM('CASH', 'BANK_TRANSFER', 'WALLET', 'OTHER') DEFAULT 'OTHER',
     note VARCHAR(255),
     reference VARCHAR(64),
-    status ENUM('PENDING', 'CONFIRMED', 'CANCELED') DEFAULT 'CONFIRMED',
+    status ENUM('PENDING', 'CONFIRMED', 'CANCELED') DEFAULT 'PENDING',
     created_at TIMESTAMP NOT NULL,
     confirmed_at TIMESTAMP,
     CONSTRAINT fk_settlements_expense FOREIGN KEY (expense_id) REFERENCES expenses(id),

@@ -48,7 +48,7 @@ public class SettlementEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private Status status = Status.CONFIRMED;
+    private Status status = Status.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

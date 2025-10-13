@@ -1,5 +1,6 @@
 package com.expenshare.repository.facade;
 
+import com.expenshare.exception.NotFoundException;
 import com.expenshare.model.entity.SettlementEntity;
 import com.expenshare.repository.SettlementRepository;
 import io.micronaut.transaction.annotation.Transactional;
@@ -14,7 +15,15 @@ public class SettlementRepositoryFacade {
         this.settlementRepository = settlementRepository;
     }
 
+    public SettlementEntity getOrThrow(Long id) {
+        return settlementRepository.findById(id).orElseThrow(() -> new NotFoundException("Settlement not found"));
+    }
+
     public SettlementEntity save(SettlementEntity settlement) {
         return settlementRepository.save(settlement);
+    }
+
+    public SettlementEntity update(SettlementEntity settlement) {
+        return settlementRepository.update(settlement);
     }
 }

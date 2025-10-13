@@ -2,12 +2,15 @@ package com.expenshare.service;
 
 import com.expenshare.event.KafkaProducer;
 import com.expenshare.event.model.MessageFactory;
+import com.expenshare.exception.ConflictException;
 import com.expenshare.exception.ValidationException;
 import com.expenshare.model.dto.settlement.CreateSettlementRequest;
 import com.expenshare.model.dto.settlement.SettlementDto;
+import com.expenshare.model.dto.settlement.SettlementStatusDto;
 import com.expenshare.model.entity.ExpenseEntity;
 import com.expenshare.model.entity.ExpenseShareEntity;
 import com.expenshare.model.entity.SettlementEntity;
+import com.expenshare.model.entity.Status;
 import com.expenshare.model.mapper.SettlementMapper;
 import com.expenshare.repository.facade.ExpenseRepositoryFacade;
 import com.expenshare.repository.facade.ExpenseShareRepositoryFacade;
@@ -62,7 +65,7 @@ public class SettlementService {
 
         if (expense.getGroup().getMembers()
                 .stream()
-                .noneMatch(member -> Objects.equals(member.getId(), fromUserId))) {
+                .noneMatch(member -> Objects.equals(member.getUser().getId(), fromUserId))) {
             throw new ValidationException("fromUserId must be a member of the expense's group");
         }
     }
@@ -100,14 +103,32 @@ public class SettlementService {
         settlement.setExpense(expenseRepositoryFacade.getOrThrow(expenseId));
         settlement.setFromUser(userRepositoryFacade.getOrThrow(fromUserId));
         settlement.setToUser(userRepositoryFacade.getOrThrow(toUserId));
-        settlement.setConfirmedAt(LocalDateTime.now());
 
         final SettlementEntity savedSettlement = settlementRepositoryFacade.save(settlement);
 
+        return settlementMapper.toDto(savedSettlement);
+    }
+
+    public SettlementStatusDto confirmSettlement(Long settlementId) {
+        final SettlementEntity settlement = settlementRepositoryFacade.getOrThrow(settlementId);
+
+        if (settlement.getStatus() == Status.CONFIRMED) {
+            throw new ConflictException("Settlement is already confirmed");
+        }
+
+        settlement.setStatus(Status.CONFIRMED);
+        settlement.setConfirmedAt(LocalDateTime.now());
+        final SettlementEntity updatedSettlement =  settlementRepositoryFacade.update(settlement);
+
         // update the owed amount in ExpenseShareEntity for both users
-        final BigDecimal toBeRemoved = owedAmount.min(amount);
+        final Long fromUserId = updatedSettlement.getFromUser().getId();
+        final Long toUserId = updatedSettlement.getToUser().getId();
+        final Long expenseId = updatedSettlement.getExpense().getId();
+
         final ExpenseShareEntity fromUserShare = getUserShareEntity(expenseId, fromUserId);
         final ExpenseShareEntity toUserShare = getUserShareEntity(expenseId, toUserId);
+
+        final BigDecimal toBeRemoved = updatedSettlement.getAmount().min(updatedSettlement.getAmount());
 
         fromUserShare.setShareAmount(fromUserShare.getShareAmount().subtract(toBeRemoved));
         toUserShare.setShareAmount(toUserShare.getShareAmount().add(toBeRemoved));
@@ -115,10 +136,21 @@ public class SettlementService {
         expenseShareRepositoryFacade.update(fromUserShare);
         expenseShareRepositoryFacade.update(toUserShare);
 
-        final SettlementDto settlementDto = settlementMapper.toDto(savedSettlement);
+        kafkaProducer.publishSettlementConfirmedEvent(MessageFactory.settlementConfirmedMessage(updatedSettlement));
 
-        kafkaProducer.publishSettlementConfirmedEvent(MessageFactory.settlementConfirmedMessage(settlementDto));
+        return settlementMapper.toStatusDto(updatedSettlement);
+    }
 
-        return settlementDto;
+    public SettlementStatusDto cancelSettlement(Long settlementId) {
+        final SettlementEntity settlement = settlementRepositoryFacade.getOrThrow(settlementId);
+
+        if (settlement.getStatus() != Status.PENDING) {
+            throw new ConflictException("Only pending settlements can be canceled");
+        }
+
+        settlement.setStatus(Status.CANCELED);
+        final SettlementEntity updatedSettlement =  settlementRepositoryFacade.update(settlement);
+
+        return settlementMapper.toStatusDto(updatedSettlement);
     }
 }
