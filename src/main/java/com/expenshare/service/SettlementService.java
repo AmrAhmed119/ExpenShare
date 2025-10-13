@@ -10,7 +10,7 @@ import com.expenshare.model.dto.settlement.SettlementStatusDto;
 import com.expenshare.model.entity.ExpenseEntity;
 import com.expenshare.model.entity.ExpenseShareEntity;
 import com.expenshare.model.entity.SettlementEntity;
-import com.expenshare.model.entity.Status;
+import com.expenshare.model.enums.Status;
 import com.expenshare.model.mapper.SettlementMapper;
 import com.expenshare.repository.facade.ExpenseRepositoryFacade;
 import com.expenshare.repository.facade.ExpenseShareRepositoryFacade;

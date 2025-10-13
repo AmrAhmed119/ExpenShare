@@ -1,6 +1,6 @@
 package com.expenshare.model.dto.settlement;
 
-import com.expenshare.model.entity.Method;
+import com.expenshare.model.enums.Method;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

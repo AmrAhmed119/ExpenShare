@@ -1,6 +1,6 @@
 package com.expenshare.service.expense;
 
-import com.expenshare.model.entity.SplitType;
+import com.expenshare.model.enums.SplitType;
 import io.micronaut.context.BeanContext;
 import jakarta.inject.Singleton;
 

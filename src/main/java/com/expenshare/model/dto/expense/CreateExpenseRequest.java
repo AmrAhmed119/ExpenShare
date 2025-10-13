@@ -1,6 +1,6 @@
 package com.expenshare.model.dto.expense;
 
-import com.expenshare.model.entity.SplitType;
+import com.expenshare.model.enums.SplitType;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;

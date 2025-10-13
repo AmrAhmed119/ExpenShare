@@ -1,5 +1,7 @@
 package com.expenshare.model.entity;
 
+import com.expenshare.model.enums.Method;
+import com.expenshare.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

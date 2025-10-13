@@ -6,7 +6,7 @@ import com.expenshare.model.dto.expense.ShareDto;
 import com.expenshare.model.dto.group.CreateGroupRequest;
 import com.expenshare.model.dto.group.GroupDto;
 import com.expenshare.model.dto.user.CreateUserRequest;
-import com.expenshare.model.entity.SplitType;
+import com.expenshare.model.enums.SplitType;
 import com.expenshare.service.GroupService;
 import com.expenshare.service.UserService;
 import com.expenshare.service.expense.ExpenseService;

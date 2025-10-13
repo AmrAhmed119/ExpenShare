@@ -1,5 +1,6 @@
 package com.expenshare.model.entity;
 
+import com.expenshare.model.enums.SplitType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
