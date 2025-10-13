@@ -2,7 +2,11 @@ package com.expenshare.controller;
 
 import com.expenshare.model.dto.expense.CreateExpenseRequest;
 import com.expenshare.model.dto.expense.ExpenseDto;
+import com.expenshare.model.dto.expense.ExpenseSettlementsDto;
+import com.expenshare.model.enums.Status;
+import com.expenshare.service.Settlement.SettlementService;
 import com.expenshare.service.expense.ExpenseService;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,13 +16,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 
 @Controller("/api/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
 
-    public ExpenseController(ExpenseService expenseService) {
+    private final SettlementService settlementService;
+
+    public ExpenseController(
+            ExpenseService expenseService,
+            SettlementService settlementService
+    ) {
         this.expenseService = expenseService;
+        this.settlementService = settlementService;
     }
 
     @Operation(
@@ -62,5 +73,19 @@ public class ExpenseController {
     public HttpResponse<ExpenseDto> addExpense(@Body @Valid CreateExpenseRequest createExpenseRequest) {
         final ExpenseDto expenseDto = expenseService.addExpense(createExpenseRequest);
         return HttpResponse.created(expenseDto);
+    }
+
+    @Get("/{expenseId}/settlements")
+    public HttpResponse<ExpenseSettlementsDto> getExpenseSettlements(
+        @PathVariable Long expenseId,
+        @QueryValue(value = "status") @Nullable Status status,
+        @QueryValue(value = "fromUserId") @Nullable Long fromUserId,
+        @QueryValue(value = "toUserId") @Nullable Long toUserId,
+        @QueryValue(value = "page", defaultValue = "0") int page,
+        @QueryValue(value = "size", defaultValue = "20") @Max(100) int size
+    ) {
+        ExpenseSettlementsDto settlements = settlementService
+                .filterExpenseSettlements(expenseId, status, fromUserId, toUserId, page, size);
+        return HttpResponse.ok(settlements);
     }
 }

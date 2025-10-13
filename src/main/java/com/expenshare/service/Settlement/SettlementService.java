@@ -1,9 +1,10 @@
-package com.expenshare.service;
+package com.expenshare.service.Settlement;
 
 import com.expenshare.event.KafkaProducer;
 import com.expenshare.event.model.MessageFactory;
 import com.expenshare.exception.ConflictException;
 import com.expenshare.exception.ValidationException;
+import com.expenshare.model.dto.expense.ExpenseSettlementsDto;
 import com.expenshare.model.dto.settlement.CreateSettlementRequest;
 import com.expenshare.model.dto.settlement.SettlementDto;
 import com.expenshare.model.dto.settlement.SettlementStatusDto;
@@ -16,10 +17,14 @@ import com.expenshare.repository.facade.ExpenseRepositoryFacade;
 import com.expenshare.repository.facade.ExpenseShareRepositoryFacade;
 import com.expenshare.repository.facade.SettlementRepositoryFacade;
 import com.expenshare.repository.facade.UserRepositoryFacade;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 import jakarta.inject.Singleton;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Singleton
@@ -152,5 +157,44 @@ public class SettlementService {
         final SettlementEntity updatedSettlement =  settlementRepositoryFacade.update(settlement);
 
         return settlementMapper.toStatusDto(updatedSettlement);
+    }
+
+    public ExpenseSettlementsDto filterExpenseSettlements(
+        Long expenseId,
+        Status status,
+        Long fromUserId,
+        Long toUserId,
+        int page,
+        int size
+    ) {
+        PredicateSpecification<SettlementEntity> specs = SettlementSpecifications.hasExpenseId(expenseId);
+
+        if (status != null) specs = specs.and(SettlementSpecifications.hasStatus(status));
+        if (fromUserId != null) specs = specs.and(SettlementSpecifications.hasFromUserId(fromUserId));
+        if (toUserId != null) specs = specs.and(SettlementSpecifications.hasToUserId(toUserId));
+
+        Pageable pageable = Pageable.from(page, size);
+
+        final Page<SettlementEntity> settlementPage = settlementRepositoryFacade
+                .filterExpenseSettlements(specs, pageable);
+
+        final List<ExpenseSettlementsDto.Item> items = settlementPage
+                .getContent()
+                .stream()
+                .map((settlement) ->  new ExpenseSettlementsDto.Item(
+                        settlement.getId(),
+                        settlement.getFromUser().getId(),
+                        settlement.getToUser().getId(),
+                        settlement.getAmount(),
+                        settlement.getStatus()
+                )).toList();
+
+        return new ExpenseSettlementsDto(
+                expenseId,
+                items,
+                settlementPage.getPageNumber(),
+                settlementPage.getSize(),
+                (int) settlementPage.getTotalSize()
+        );
     }
 }

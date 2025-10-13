@@ -3,7 +3,7 @@ package com.expenshare.controller;
 import com.expenshare.model.dto.settlement.CreateSettlementRequest;
 import com.expenshare.model.dto.settlement.SettlementDto;
 import com.expenshare.model.dto.settlement.SettlementStatusDto;
-import com.expenshare.service.SettlementService;
+import com.expenshare.service.Settlement.SettlementService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;

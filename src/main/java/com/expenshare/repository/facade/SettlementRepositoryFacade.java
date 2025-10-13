@@ -3,6 +3,9 @@ package com.expenshare.repository.facade;
 import com.expenshare.exception.NotFoundException;
 import com.expenshare.model.entity.SettlementEntity;
 import com.expenshare.repository.SettlementRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 
@@ -25,5 +28,12 @@ public class SettlementRepositoryFacade {
 
     public SettlementEntity update(SettlementEntity settlement) {
         return settlementRepository.update(settlement);
+    }
+
+    public Page<SettlementEntity> filterExpenseSettlements(
+        PredicateSpecification<SettlementEntity> specs,
+        Pageable pageable
+    ) {
+        return settlementRepository.findAll(specs, pageable);
     }
 }
