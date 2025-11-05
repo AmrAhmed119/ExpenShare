@@ -133,7 +133,7 @@ public class SettlementService {
         final ExpenseShareEntity fromUserShare = getUserShareEntity(expenseId, fromUserId);
         final ExpenseShareEntity toUserShare = getUserShareEntity(expenseId, toUserId);
 
-        final BigDecimal toBeRemoved = updatedSettlement.getAmount().min(updatedSettlement.getAmount());
+        final BigDecimal toBeRemoved = updatedSettlement.getAmount().min(getOwedAmount(expenseId, fromUserId));
 
         fromUserShare.setShareAmount(fromUserShare.getShareAmount().subtract(toBeRemoved));
         toUserShare.setShareAmount(toUserShare.getShareAmount().add(toBeRemoved));
